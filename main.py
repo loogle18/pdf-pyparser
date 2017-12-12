@@ -9,7 +9,7 @@ REPORTS_ARCHIVE_PATH = '/samples/NYSE_ATO_REPORTS.tar.gz'
 
 
 def main():
-    current_path = os.getcwd()
+    cwd = os.getcwd()
     archive_path = os.getcwd() + REPORTS_ARCHIVE_PATH
     opened_tar = tarfile.open(archive_path, 'r:gz')
     for member in opened_tar.getmembers():
@@ -19,13 +19,13 @@ def main():
             retstr = StringIO()
             laparams = LAParams()
             device = TextConverter(rsrcmgr, retstr, laparams=laparams)
-            content = retstr.getvalue()
             process_pdf(rsrcmgr, device, file)
             file.close()
             device.close()
+            content = retstr.getvalue()
             retstr.close()
-
-            new_file_path = '{0}/{1}.txt'.format(current_path, member.name)
+            new_file_path = '{0}/{1}.txt'.format(
+                cwd, member.name.replace('.pdf', ''))
             with open(new_file_path, 'w') as output:
                 output.write(content)
 
